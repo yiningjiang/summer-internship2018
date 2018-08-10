@@ -13,7 +13,7 @@ curs = exec(conn,cmd);
 curs = fetch(curs);
 bankinfo = curs.Data;
 
-cmd = ['select f16_1090 代码,f2_1853 日期,f4_1853 报表类型,f47_1853,f48_1853,f50_1853,f10_1853,f52_1853,f53_1853,f26_1853,f29_1853,f155_1853,f31_1853,f41_1853,f70_1853,f104_1853,f106_1853,f108_1853,f109_1853,f80_1853,f81_1853,f95_1853,f111_1853,f128_1853',...
+cmd = ['select f16_1090 代码,f2_1853 日期,f4_1853 报表类型,f47_1853,f48_1853,f50_1853,f10_1853,f52_1853,f53_1853,f26_1853,f29_1853,f155_1853,f31_1853,f41_1853,f70_1853,f104_1853,f106_1853,f108_1853,f109_1853,f80_1853,f81_1853,f95_1853,f111_1853,f128_1853,f140_1853,f74_1853',...
     ' from wind.tb_object_1853,wind.tb_object_1090  ', ...
 'where F1_1853=OB_REVISIONS_1090  and f4_1090=''A'' and f4_1853=''合并报表'' and f5_1853=''2''', ...
 ' and f2_1853>= ''' dateinfo{1} ''' and f2_1853<= ''' dateinfo{end} '''  order by f2_1853']; %%
@@ -30,7 +30,7 @@ curs = fetch(curs);
 f1854raw = curs.Data;
 
 
-cmd = ['select f4_0001 代码,f2_1454 日期,f54_1454,f29_1454,f35_1454,f42_1454,f38_1454,f43_1454,f35_1454,f57_1454,f44_1454,f5_1454,f50_1454,f26_1454,f27_1454,f3_1454,f4_1454,f24_1454,f23_1454',...
+cmd = ['select f4_0001 代码,f2_1454 日期,f54_1454,f29_1454,f35_1454,f42_1454,f38_1454,f43_1454,f35_1454,f57_1454,f44_1454,f5_1454,f50_1454,f26_1454,f27_1454,f3_1454,f4_1454,f24_1454,f23_1454,f55_1454',...
     ' from wind.tb_object_1454,wind.tb_object_0001  ', ...
 'where F1_1454=F17_0001 and F12_0001=''A'' and f54_1454=''408001000'' ', ...
 ' and f2_1454>= ''' dateinfo{1} '''and f2_1454<= ''' dateinfo{end} '''  order by f2_1454']; %%
@@ -47,12 +47,20 @@ curs = exec(conn,cmd);
 curs = fetch(curs);
 f5034raw = curs.Data;
 
+cmd = ['select f16_1090 代码,f3_1158 日期,f44_1158,f7_1158,f12_1158',...
+    ' from wind.tb_object_1158,wind.tb_object_1090  ', ...
+'where F1_1158=OB_REVISIONS_1090 and f4_1090=''A'' and f44_1158=''408001000'' ', ...
+' and f3_1158>= ''' dateinfo{1} ''' and f3_1158<=''' dateinfo{end} '''  order by f3_1158']; %%
+curs = exec(conn,cmd);
+curs = fetch(curs);
+f1158raw = curs.Data; 
+
 %%step2 筛选出26家上市银行相关数据
 a=1;f1853={};
 for i=1:length(f1853raw)
     ss=str2double(f1853raw(i,1));
     if ss==000001 || ss==002142|| ss==002807|| ss==002839|| ss==600000|| ss==600015|| ss==600016|| ss==600036|| ss==600908|| ss==600919|| ss==600926|| ss==601009|| ss==601128|| ss==601166|| ss==601169|| ss==601229|| ss==601288|| ss==601328|| ss==601398|| ss==601818|| ss==601838|| ss==601939|| ss==601988|| ss==601997|| ss==601998|| ss==603323
-        f1853(a,1:24)=f1853raw(i,1:24);
+        f1853(a,1:26)=f1853raw(i,1:26);
         a=a+1;
     end
 end;
@@ -71,7 +79,7 @@ a=1;f1454={};
 for i=1:length(f1454raw)
     ss=str2double(f1454raw(i,1));
     if ss==000001 || ss==002142|| ss==002807|| ss==002839|| ss==600000|| ss==600015|| ss==600016|| ss==600036|| ss==600908|| ss==600919|| ss==600926|| ss==601009|| ss==601128|| ss==601166|| ss==601169|| ss==601229|| ss==601288|| ss==601328|| ss==601398|| ss==601818|| ss==601838|| ss==601939|| ss==601988|| ss==601997|| ss==601998|| ss==603323
-        f1454(a,1:19)=f1454raw(i,1:19);
+        f1454(a,1:20)=f1454raw(i,1:20);
         a=a+1;
     end
 end;
@@ -85,6 +93,15 @@ for i=1:length(f5034raw)
     end
 end;
 ;
+a=1;f1158={};
+for i=1:length(f1158raw)
+    ss=str2double(f1158raw(i,1));
+    if ss==000001 || ss==002142|| ss==002807|| ss==002839|| ss==600000|| ss==600015|| ss==600016|| ss==600036|| ss==600908|| ss==600919|| ss==600926|| ss==601009|| ss==601128|| ss==601166|| ss==601169|| ss==601229|| ss==601288|| ss==601328|| ss==601398|| ss==601818|| ss==601838|| ss==601939|| ss==601988|| ss==601997|| ss==601998|| ss==603323
+        f1158(a,1:5)=f1158raw(i,1:5);
+        a=a+1;
+    end
+end;
+;
 
 
 [data1,banklist]= xlsread('/Users/jiangyining/Desktop/banklist.xlsx');
@@ -94,7 +111,7 @@ clear data1;
 clear ss;
 clear a;
 clear i;
-clear f5034raw;clear f1454raw;clear f1853raw;clear f1854raw;
+clear f5034raw;clear f1454raw;clear f1853raw;clear f1854raw;clear f1158raw;
 clear curs;
 clear cmd;
 clear conn;
@@ -122,7 +139,9 @@ clear conn;
         data.TaxPay{a,b}=f1853{i,21};   
         data.BondPay{a,b}=f1853{i,22};
         data.OtherLiability{a,b}=f1853{i,23};
-        data.TotalDebt{a,b}=f1853{i,24};  
+        data.TotalDebt{a,b}=f1853{i,24};
+        data.Equity{a,b}=f1853{i,25};
+        data.TotalAsset{a,b}=f1853{i,26};
     end;
     
     
@@ -159,6 +178,7 @@ clear conn;
         data.CCAR{a,b}=f1454{i,17};
         data.TotalDeposit{a,b}=f1454{i,18};
         data.TotalLoan{a,b}=f1454{i,19};
+        data.ProvisionRatio{a,b}=f1454{i,20};
     end;
 
 
@@ -167,16 +187,82 @@ clear conn;
         [bool,b]=ismember(f5034{i,2},dateinfo);
         data.OperationSaleIncreaseRate{a,b}=f5034{i,4};
         data.NetProfiteIncreaseRate{a,b}=f5034{i,5};
-        data.ROE{a,b}=f5034{i,6};
         data.EquityMultiplier{a,b}=f5034{i,7};
         data.MeanNetAssetChange{a,b}=f5034{i,8};
         data.MeanNetAssetProfitRatio{a,b}=f5034{i,9};
     end;
-
-
-clear bankinfo;clear a;clear b;clear i;clear bool;clear f1853;clear f1854;clear f1454;clear f5034;clear startdate;
-
-
-
-
-
+    
+     for i=1:length(f1158)
+        [bool,a]=ismember(f1158{i,1},bankinfo);
+        [bool,b]=ismember(f1158{i,2},dateinfo);
+        data.ROEWeighted{a,b}=f1158{i,5};
+    end;
+clear bankinfo;clear a;clear b;clear i;clear bool;clear f1853;clear f1854;clear f1454;clear f5034;clear f1158;clear startdate;
+%将空缺补nan
+        data.Cash(cellfun(@isempty,data.Cash))={NaN};
+        data.DueFrBanksAndOthers(cellfun(@isempty,data.DueFrBanksAndOthers))={NaN};
+        data.LendToBank(cellfun(@isempty,data.LendToBank))={NaN};
+        data.TradableFinancialAssets(cellfun(@isempty,data.TradableFinancialAssets))={NaN};
+        data.BBSAsset(cellfun(@isempty,data.BBSAsset))={NaN};
+        data.LoanAndAdvance(cellfun(@isempty,data.LoanAndAdvance))={NaN};
+        data.AFSAsset(cellfun(@isempty,data.AFSAsset))={NaN};
+        data.LongtermInvest(cellfun(@isempty,data.LongtermInvest))={NaN};
+        data.AccountReceivableInvest(cellfun(@isempty,data.AccountReceivableInvest))={NaN};
+        data.FixCapital(cellfun(@isempty,data.FixCapital))={NaN};
+        data.DeferredTaxAsset(cellfun(@isempty,data.DeferredTaxAsset))={NaN};
+        data.TotalAsset(cellfun(@isempty,data.TotalAsset))={NaN};
+        data.OtherAsset(cellfun(@isempty,data.OtherAsset))={NaN};
+        data.DueFrBankAndOthers(cellfun(@isempty,data.DueFrBankAndOthers))={NaN};
+        data.LoanFrBank(cellfun(@isempty,data.LoanFrBank))={NaN};
+        data.SoldForRepurchaseAsset(cellfun(@isempty,data.SoldForRepurchaseAsset))={NaN};
+        data.AcceptMoneyDeposit(cellfun(@isempty,data.AcceptMoneyDeposit))={NaN};
+        data.StaffSalary(cellfun(@isempty,data.StaffSalary))={NaN};
+        data.TaxPay(cellfun(@isempty,data.TaxPay))={NaN};
+        data.BondPay(cellfun(@isempty,data.BondPay))={NaN};
+        data.OtherLiability(cellfun(@isempty,data.OtherLiability))={NaN};
+        data.TotalDebt(cellfun(@isempty,data.TotalDebt))={NaN};
+        data.FairValueAsset(cellfun(@isempty,data.FairValueAsset))={NaN};
+        data.OperatingIncome(cellfun(@isempty,data.OperatingIncome))={NaN};
+        data.OperatingProfit(cellfun(@isempty,data.OperatingProfit))={NaN};
+        data.NetInterestIncome(cellfun(@isempty,data.NetInterestIncome))={NaN};
+        data.NetCommissionIncome(cellfun(@isempty,data.NetCommissionIncome))={NaN};
+        data.AssetImpairmentLoss(cellfun(@isempty,data.AssetImpairmentLoss))={NaN};
+        data.OutofOperationProfit(cellfun(@isempty,data.OutofOperationProfit))={NaN};
+        data.NetProfit(cellfun(@isempty,data.NetProfit))={NaN};
+        data.CostIncomeRatio(cellfun(@isempty,data.CostIncomeRatio))={NaN};
+        data.TotalInterestBearingAsset(cellfun(@isempty,data.TotalInterestBearingAsset))={NaN};
+        data.NoInterestBearingAsset(cellfun(@isempty,data.NoInterestBearingAsset))={NaN};
+        data.TotalInterestBearingLiability(cellfun(@isempty,data.TotalInterestBearingLiability))={NaN};
+        data.NoInterestBearingLiability(cellfun(@isempty,data.NoInterestBearingLiability))={NaN};
+        data.InterestBearingAsset(cellfun(@isempty,data.InterestBearingAsset))={NaN};
+        data.MeanInterestBearingAsset(cellfun(@isempty,data.MeanInterestBearingAsset))={NaN};
+        data.NIM(cellfun(@isempty,data.NIM))={NaN};
+        data.RejectRatio(cellfun(@isempty,data.RejectRatio))={NaN};
+        data.OverdueLoan(cellfun(@isempty,data.OverdueLoan))={NaN};
+        data.RejectLoanBalance(cellfun(@isempty,data.RejectLoanBalance))={NaN};
+        data.ProvisionCoverage(cellfun(@isempty,data.ProvisionCoverage))={NaN};
+        data.CAR(cellfun(@isempty,data.CAR))={NaN};
+        data.CCAR(cellfun(@isempty,data.CCAR))={NaN};
+        data.TotalDeposit(cellfun(@isempty,data.TotalDeposit))={NaN};
+        data.TotalLoan(cellfun(@isempty,data.TotalLoan))={NaN};
+        data.OperationSaleIncreaseRate(cellfun(@isempty,data.OperationSaleIncreaseRate))={NaN};
+        data.NetProfiteIncreaseRate(cellfun(@isempty,data.NetProfiteIncreaseRate))={NaN};
+        data.EquityMultiplier(cellfun(@isempty,data.EquityMultiplier))={NaN};
+        data.MeanNetAssetChange(cellfun(@isempty,data.MeanNetAssetChange))={NaN};
+        data.MeanNetAssetProfitRatio(cellfun(@isempty,data.MeanNetAssetProfitRatio))={NaN};
+        data.ROEWeighted(cellfun(@isempty,data.ROEWeighted))={NaN};
+        data.Equity(cellfun(@isempty,data.Equity))={NaN};
+        data.ProvisionRatio(cellfun(@isempty,data.ProvisionRatio))={NaN};
+      %roe 
+        [m,n]=size(data.NIM);
+        for i=1:m
+            for j=1:n
+                data.ROE{i,j}=data.NetProfit{i,j}/data.Equity{i,j};
+            end;
+        end;
+        for i=1:m
+            for j=1:n
+                data.DebtAssetRatio{i,j}=data.TotalDebt{i,j}/data.TotalAsset{i,j};
+            end;
+        end;
+        clear i;clear j;clear m;clear n;
